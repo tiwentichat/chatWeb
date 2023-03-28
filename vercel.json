@@ -1,0 +1,27 @@
+{
+  "builds": [
+    {
+      "src": "main.py",
+      "use": "@vercel/python"
+    }
+  ],
+  "env": {
+    "OPENAI_API_KEY": "sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+  },
+  "build": {
+    "env": {
+      "PYTHON_VERSION": "3.8"
+    },
+    "commands": [
+      "sudo apt-get install -y postgresql",
+      "sudo apt-get install -y libpq-dev",
+      "sudo -u postgres psql -c 'create database mydb;'",
+      "git clone --branch v0.4.0 https://github.com/pgvector/pgvector.git /tmp/pgvector",
+      "cd /tmp/pgvector",
+      "make",
+      "sudo make install"
+    ],
+    "use": "@vercel/now-build-utils"
+  },
+  "routes": [{ "src": "/(.*)", "dest": "/main.py" }]
+}
